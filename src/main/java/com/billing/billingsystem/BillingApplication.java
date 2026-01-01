@@ -8,6 +8,7 @@ public class BillingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BillingApplication.class, args);
+		System.out.println("Billing Application Started"+":"+"http://localhost:8080/"  );
 	}
 
 }
