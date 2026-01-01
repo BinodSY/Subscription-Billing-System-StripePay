@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.billing.billingsystem.subscriptions.Subscription;
 
 @Entity
 @Table(name = "invoices")
@@ -28,6 +29,7 @@ public class Invoice {
     @ManyToOne(optional = false)
     @JoinColumn(name = "subscription_id", nullable = false)
     private Subscription subscription;
+    
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;

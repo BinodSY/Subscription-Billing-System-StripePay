@@ -1,9 +1,11 @@
-package com.billing.billingsystem.Users;
+package com.billing.billingsystem.users;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
- 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 @Service
 public class UserService {
     @Autowired
@@ -11,5 +13,11 @@ public class UserService {
     
     public User createUser(User user){
         return userRepository.save(user);
+    }
+
+    public Page<User> getAllUsers(int size,int page)
+        {
+                Pageable pageble=PageRequest.of(page,size,Sort.by("createdAt").descending());
+                return userRepository.findAll( pageble);
     }
 }

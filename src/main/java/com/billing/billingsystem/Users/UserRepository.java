@@ -1,4 +1,4 @@
-package com.billing.billingsystem.Users;
+package com.billing.billingsystem.users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
