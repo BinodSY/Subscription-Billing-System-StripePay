@@ -25,16 +25,16 @@ public class SubscriptionController {
 
     //local host:8080/subscriptions/{id}/planchange
     @PostMapping("/{id}/planchange")
-    public ResponseEntity<?> changeSubcriptionPlan(@PathVariable UUID id, @RequestBody UUID newPlanId) {
-        Subscription updatedSubscription = subscriptionService.changeSubscriptionPlan(id, newPlanId);
+    public ResponseEntity<?> changeSubcriptionPlan(@PathVariable UUID subscriptionId, @RequestBody UUID newPlanId) {
+        Subscription updatedSubscription = subscriptionService.changeSubscriptionPlan(subscriptionId, newPlanId);
         return ResponseEntity.ok(updatedSubscription);
     }
 
     //local host:8080/subscriptions/{id}/cancel
     @PostMapping("/{id}/cancel")
-    public ResponseEntity<?> cancelSubscription(@PathVariable UUID id) {
+    public ResponseEntity<?> cancelSubscription(@PathVariable UUID subscriptionId) {
         // Implementation for canceling a subscription
-        subscriptionService.cancelSubscription(id);
+        subscriptionService.cancelSubscription(subscriptionId);
         return ResponseEntity.ok().body("Subscription canceled successfully");
     }
 

@@ -56,6 +56,12 @@ public class Subscription {
 
     @Column(name="cancel_at_period_end")
     private boolean cancelAtPeriodEnd;
+    //it will help cron to find the subscription to attempt payment
+    @Column(name="auto_renew")
+    private boolean autoRenew;
+    //it will help cron to find the subscription to attempt payment
+    @Column(name="next_month_bill_paid",nullable=false) 
+    private boolean nextMonthBillPaid;
 
     @Column(name = "plan_change_effective_at")
     private Instant planChangeEffectiveAt;
