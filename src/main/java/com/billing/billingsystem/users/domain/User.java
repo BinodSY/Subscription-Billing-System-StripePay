@@ -1,4 +1,4 @@
-package com.billing.billingsystem.users;
+package com.billing.billingsystem.users.domain;
 
 import java.time.Instant;
 import java.util.UUID;

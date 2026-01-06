@@ -1,10 +1,10 @@
-package com.billing.billingsystem.subscriptions;
+package com.billing.billingsystem.subscriptions.domain;
 
 import java.time.Instant;
 import java.util.UUID;
 
-import com.billing.billingsystem.users.User;
-import com.billing.billingsystem.plans.Plan;
+import com.billing.billingsystem.plans.domain.Plan;
+import com.billing.billingsystem.users.domain.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,11 +1,15 @@
-package com.billing.billingsystem.subscriptions;
+package com.billing.billingsystem.subscriptions.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.billing.billingsystem.dto.SubscriptionReqest;
+
+import com.billing.billingsystem.subscriptions.application.SubscriptionService;
+import com.billing.billingsystem.subscriptions.domain.Subscription;
+import com.billing.billingsystem.subscriptions.domain.SubscriptionReqest;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.UUID;

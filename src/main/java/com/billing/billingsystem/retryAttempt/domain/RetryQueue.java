@@ -1,6 +1,8 @@
-package com.billing.billingsystem.model;
+package com.billing.billingsystem.retryAttempt.domain;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.billing.billingsystem.model.Payment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.billing.billingsystem.plans;
+package com.billing.billingsystem.plans.domain;
 
 
 import java.math.BigDecimal;

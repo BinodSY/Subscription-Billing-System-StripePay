@@ -1,6 +1,10 @@
-package com.billing.billingsystem.plans;
+package com.billing.billingsystem.plans.application;
 
 import org.springframework.stereotype.Service;
+
+import com.billing.billingsystem.plans.databaseArchitecture.PlanRepository;
+import com.billing.billingsystem.plans.domain.Plan;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 

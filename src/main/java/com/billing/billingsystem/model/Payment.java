@@ -3,6 +3,8 @@ package com.billing.billingsystem.model;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.billing.billingsystem.invoices.domain.Invoice;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -1,4 +1,4 @@
-package com.billing.billingsystem.users;
+package com.billing.billingsystem.users.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.billing.billingsystem.dto.PageResponse;
+import com.billing.billingsystem.users.application.UserService;
+import com.billing.billingsystem.users.domain.User;
 
 @RestController
 @RequestMapping("/users")
