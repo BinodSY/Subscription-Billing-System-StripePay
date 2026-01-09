@@ -31,7 +31,13 @@ public class PaymentAttemptService {
         processPaymentAttempt(attempt,sub);
     }
 
-    
+    // retry payment attempts by cron job
+    public void retryPaymentAttempt(){
+        PaymentAttempt attempt=paymentAttemptRepository.findByNextRetryAtEqual(Instant.now());
+        Subscription sub=attempt.getSubscription();
+        processPaymentAttempt(attempt,sub);
+        
+    }
 
     // processing payment attempt logic
     private void processPaymentAttempt(PaymentAttempt attempt,Subscription sub){
