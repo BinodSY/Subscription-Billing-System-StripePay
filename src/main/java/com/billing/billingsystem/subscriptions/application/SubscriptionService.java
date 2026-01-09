@@ -2,7 +2,7 @@ package com.billing.billingsystem.subscriptions.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.billing.billingsystem.payment.repository.PaymentAttemptRepository;
 import com.billing.billingsystem.plans.databaseArchitecture.PlanRepository;
 import com.billing.billingsystem.plans.domain.Plan;
 import com.billing.billingsystem.subscriptions.DatabaseArchitecture.SubscriptionRepository;
@@ -11,6 +11,7 @@ import com.billing.billingsystem.subscriptions.domain.SubscriptionReqest;
 import com.billing.billingsystem.users.databaseArchitecture.UserRepository;
 import com.billing.billingsystem.users.domain.User;
 import com.billing.billingsystem.invoices.application.InvoiceService;
+import com.billing.billingsystem.payment.application.PaymentAttemptService;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -21,6 +22,8 @@ import java.util.List;
 
 @Service
 public class SubscriptionService {
+
+    private final PaymentAttemptRepository paymentAttemptRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -29,6 +32,13 @@ public class SubscriptionService {
     private SubscriptionRepository subscriptionRepository;
     @Autowired
     private InvoiceService invoiceService;
+
+    @Autowired
+    private PaymentAttemptService paymentAttemptService;
+    
+    public SubscriptionService(PaymentAttemptRepository paymentAttemptRepository) {
+        this.paymentAttemptRepository = paymentAttemptRepository;
+    }
 
     // Business logic for managing subscriptions would go here
     //creating for new subscription by the first time user 
@@ -153,7 +163,6 @@ public class SubscriptionService {
     }
 
     //automatic payment attempt by cron
-    @Transactional
     public void autoBillPay() {
 
     List<Subscription> subs =
@@ -162,20 +171,15 @@ public class SubscriptionService {
 
     for (Subscription sub : subs) {
 
-        // Safety guard
-        if (sub.getCurrentPeriodEnd().isAfter(Instant.now())) {
-            // still in current period, OK to pre-pay
-        }
+            String key=sub.getId().toString()+":"+sub.getCurrentPeriodStart().toString();
 
-        // Attempt payment (integration omitted)
-        boolean paymentSuccess = true;
-
-        if (paymentSuccess) {
-            sub.setNextMonthBillPaid(true);
-            subscriptionRepository.save(sub);
+            if(paymentAttemptRepository.existsByIdempotencyKey(key)){
+                continue; // idempotent check
+            }else{
+                paymentAttemptService.firstPaymentAttempt(sub.getId());
+            }   
         }
     }
-}
 
 
     // Cancel subscription in the middle of period but they will remain active till period end

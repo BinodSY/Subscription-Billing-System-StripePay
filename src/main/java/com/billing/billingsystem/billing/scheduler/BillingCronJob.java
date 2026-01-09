@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.billing.billingsystem.subscriptions.DatabaseArchitecture.SubscriptionRepository;
 import com.billing.billingsystem.subscriptions.application.SubscriptionService;
-import org.springframework.scheduling.annotation.Scheduled;
+// import org.springframework.scheduling.annotation.Scheduled;
 
 
 @Component
@@ -38,7 +38,7 @@ public class BillingCronJob {
     subscriptionService.finalizeCancellations();
    }
 
-   @Scheduled(fixedDelay = 5000)
+//    @Scheduled(fixedDelay = 5000)
    public void testScheduler(){
     System.out.println("Cron is working");
    }
