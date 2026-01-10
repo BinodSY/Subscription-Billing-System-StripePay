@@ -34,10 +34,10 @@ public class PlanController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newPlan);
     }
 
-    //local host:8080/plan/{id}, it is resolving getting current plan or pending plan if avilable for subscription \n
+    //local host:8080/plan/{subscriptionId}, it is resolving getting current plan or pending plan if avilable for subscription \n
     // helpful for frontend to show correct plan details 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> getSubscriptionDetails(@PathVariable UUID subscriptionId) {
+    @PostMapping("/{subscriptionId}")
+    public ResponseEntity<?> getPlanDetails(@PathVariable UUID subscriptionId) {
         Plan plan = planService.resolveEffectivePlan(subscriptionId);
         return ResponseEntity.ok(plan);
     }
