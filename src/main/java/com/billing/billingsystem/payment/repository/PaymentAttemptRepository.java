@@ -5,11 +5,13 @@ import com.billing.billingsystem.payment.domain.PaymentAttempt;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
 
 public interface PaymentAttemptRepository extends JpaRepository<PaymentAttempt, UUID> {
 
     boolean existsByIdempotencyKey(String key);
 
-    PaymentAttempt findByNextRetryAtEqual(Instant now);
+   List<PaymentAttempt> findByStatusInAndNextRetryAtLessThanEqual(List<String> statuses,Instant now);
+
 
 }

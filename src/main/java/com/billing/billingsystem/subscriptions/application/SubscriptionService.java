@@ -13,7 +13,8 @@ import com.billing.billingsystem.users.domain.User;
 import com.billing.billingsystem.invoices.application.InvoiceService;
 import com.billing.billingsystem.payment.application.PaymentAttemptService;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import jakarta.transaction.Transactional;
@@ -60,7 +61,8 @@ public class SubscriptionService {
         subscription.setStatus("ACTIVE");
         subscription.setStartDate(now);
         subscription.setCurrentPeriodStart(subscription.getStartDate());
-        subscription.setCurrentPeriodEnd(subscription.getCurrentPeriodStart().plusSeconds(30*24*60*60)); // assuming a 30-day period
+        Instant billingEndDate=calculateNextPeriodEnd(subscription.getCurrentPeriodStart(),plan.getBillingInterval());
+        subscription.setCurrentPeriodEnd((billingEndDate)); 
         subscription.setNextMonthBillPaid(false);
         subscription.setAutoRenew(subscriptionreq.autoRenew());
 
@@ -92,7 +94,7 @@ public class SubscriptionService {
     }
 
     // Rollover a single subscription, used by cron job
-    @Transactional
+    
     public void rolloverSingleSubscription(UUID subscriptionId) {
         Subscription sub = subscriptionRepository.findById(subscriptionId)
             .orElseThrow(() -> new RuntimeException("Subscription not found"));
@@ -105,7 +107,8 @@ public class SubscriptionService {
         resetPaymentStatus(saveBillingDuration(subc));
     }
 
-    //assign new plan or upcomming plan 
+    //assign new plan or upcomming plan
+    @Transactional
     public Subscription applyPendingPlanIfAny(Subscription sub) {
     // Apply pending plan ONLY at boundary
         if (sub.getPendingPlan() != null) {
@@ -123,6 +126,7 @@ public class SubscriptionService {
     }
 
     //save new billing duration after period end
+    @Transactional
     public Subscription saveBillingDuration(Subscription sub){
         sub.setCurrentPeriodStart(sub.getCurrentPeriodEnd());
         Instant billEndingDate=calculateNextPeriodEnd(sub.getCurrentPeriodStart(),sub.getPlan().getBillingInterval());
@@ -131,16 +135,25 @@ public class SubscriptionService {
     }
 
     //calculate next billing period end based on billing interval
-    public Instant calculateNextPeriodEnd(Instant periodStart,String billingInterval){
-        return switch (billingInterval) {
-            case "MONTHLY" -> periodStart.plus(1, ChronoUnit.MONTHS);
-            case "YEARLY"  -> periodStart.plus(1, ChronoUnit.YEARS);
-            case "TRIAL"   -> periodStart.plus(14, ChronoUnit.DAYS);
+    public Instant calculateNextPeriodEnd(
+            Instant periodStart,
+            String billingInterval
+    ) {
+        ZonedDateTime zdt = periodStart.atZone(ZoneOffset.UTC);
+
+        ZonedDateTime nextEnd = switch (billingInterval) {
+            case "MONTHLY" -> zdt.plusMonths(1);
+            case "YEARLY"  -> zdt.plusYears(1);
+            case "TRIAL"   -> zdt.plusDays(14);
             default -> throw new IllegalArgumentException("Invalid billing interval");
         };
+
+        return nextEnd.toInstant();
     }
+
     
     //reset payment status for next billing cycle
+    @Transactional
     public void resetPaymentStatus(Subscription sub){
         sub.setNextMonthBillPaid(false);
         subscriptionRepository.save(sub);

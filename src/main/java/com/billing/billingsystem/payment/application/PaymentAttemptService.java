@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 import com.billing.billingsystem.subscriptions.domain.Subscription;
 import com.billing.billingsystem.subscriptions.DatabaseArchitecture.SubscriptionRepository;
-
+// import org.springframework.data.domain.Pageable;
+// import org.springframework.data.domain.PageRequest;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 
 @Service
@@ -33,9 +35,13 @@ public class PaymentAttemptService {
 
     // retry payment attempts by cron job
     public void retryPaymentAttempt(){
-        PaymentAttempt attempt=paymentAttemptRepository.findByNextRetryAtEqual(Instant.now());
-        Subscription sub=attempt.getSubscription();
-        processPaymentAttempt(attempt,sub);
+
+        List<PaymentAttempt> attempt =paymentAttemptRepository.findByStatusInAndNextRetryAtLessThanEqual(List.of("PENDING", "RETRY_SCHEDULED"),Instant.now());
+
+        for(PaymentAttempt a:attempt){
+            Subscription sub=a.getSubscription();
+            processPaymentAttempt(a,sub);
+        }
         
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.billing.billingsystem.subscriptions.DatabaseArchitecture.SubscriptionRepository;
@@ -20,6 +21,8 @@ public class BillingCronJob {
     @Autowired
     private SubscriptionService subscriptionService;
 
+
+   @Scheduled(cron = "0 5 0 * * *", zone = "UTC") // every day at 00:05 UTC 
    public void rolloverBillingPeriod(){
     Instant now = Instant.now();
 

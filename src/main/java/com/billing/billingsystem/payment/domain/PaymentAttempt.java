@@ -33,7 +33,7 @@ public class PaymentAttempt {
     @Column(name="status", nullable = false)
     private String status; // PENDING, SUCCESS, RETRY_SCHEDULED, FAILED_PERMANENT
 
-    @Column(name="next_retry_at")
+    @Column(name="next_retry_time")
     private Instant nextRetryAt;
 
     @Column(name="attempt_count", nullable = false)
