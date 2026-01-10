@@ -71,6 +71,11 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription);
 
         }
+
+    public Subscription getSubscriptionById(UUID subscriptionId){
+        return subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(()->new RuntimeException("Subscription not found"));
+    }
         
     
 
@@ -220,4 +225,7 @@ public class SubscriptionService {
         sub.setCancelAtPeriodEnd(false);
         }
     }
+
+   
+
 }
